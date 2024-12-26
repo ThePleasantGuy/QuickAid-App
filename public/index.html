@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickAid - Emergency Help</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Hide the burn types, choking instructions, and cuts instructions initially */
+        #burn-type-buttons, #burn-instructions, #choking-tab, #cuts-tab {
+            display: none;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-direction: column; /* Stack items vertically on smaller screens */
+            margin-top: 20px;
+        }
+
+        .sidebar {
+            margin-bottom: 20px; /* Add space below sidebar on smaller screens */
+        }
+
+        .instructions {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .scenario-button {
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .scenario-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Style for emergency service buttons */
+        .emergency-button {
+            margin: 10px 0;
+            padding: 15px;
+            background-color: #FF5757;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: transform 0.2s ease-in-out, background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .emergency-button:hover {
+            transform: scale(1.05);
+            background-color: #FF4141;
+        }
+
+        .emergency-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .flex-container {
+                flex-direction: row; /* Stack side by side on larger screens */
+            }
+
+            .sidebar {
+                flex: 1;
+                margin-right: 20px;
+            }
+
+            .instructions {
+                flex: 2;
+            }
+        }
+    </style>
+</head>
+<body>
+<section class="first-aid">
+    <h2>QuickAid Emergency App</h2>
+
+    <h3>Emergency Services</h3>
+    <div class="emergency-buttons">
+        <button class="emergency-button" onclick="callEmergencyService('parents')">👪 Call Parents👪</button>
+        <button class="emergency-button" onclick="callEmergencyService('police')">🚔 Call Police 🚔</button>
+        <button class="emergency-button" onclick="callEmergencyService('ambulance')">🚑 Call Ambulance 🚑</button>
+        <button class="emergency-button" onclick="callEmergencyService('fire')">🚒 Call Fire Department 🚒</button>
+    </div>
+
+    <h3>First Aid Instructions</h3>
+    <p id="aid-instructions">Select a scenario for instructions.</p>
+
+    <div class="flex-container">
+        <div class="sidebar">
+            <h3>First Aid Scenarios</h3>
+            <button id="burns" class="scenario-button" onclick="toggleBurns()">🔥 Burns 🔥</button>
+            <button id="choking" class="scenario-button" onclick="toggleChoking()">😵 Choking 😵</button>
+            <button id="cuts" class="scenario-button" onclick="toggleCuts()">✂️ Cuts ✂️</button>
+           
+            <div id="burns-tab" class="tab">
+                <h4>Burn Types</h4>
+                <button id="toggle-burn-types" class="scenario-button" onclick="toggleBurnTypes()">Show Burn Types</button>
+                <div id="burn-type-buttons">
+                    <button class="burn-button" onclick="showBurnType('first-degree')">1st Degree</button>
+                    <button class="burn-button" onclick="showBurnType('second-degree')">2nd Degree</button>
+                    <button class="burn-button" onclick="showBurnType('third-degree')">3rd Degree</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <div id="burn-instructions"></div>
+            <div id="choking-tab">
+                <h4>First Aid for Choking</h4>
+                <p>If someone is choking, follow these steps:</p>
+                <ol id="choking-instructions">
+                    <li>Encourage them to cough.</li>
+                    <li>If unable to cough, perform 5 back blows.</li>
+                    <li>If needed, perform abdominal thrusts (Heimlich maneuver).</li>
+                    <li>Call emergency services if the blockage is not cleared.</li>
+                </ol>
+            </div>
+            <div id="cuts-tab">
+                <h4>First Aid for Cuts</h4>
+                <p>Follow these steps for minor cuts:</p>
+                <ol>
+                    <li>Wash your hands thoroughly before treating the cut.</li>
+                    <li>Rinse the cut under clean, running water to remove dirt and debris.</li>
+                    <li>Gently clean around the cut with soap.</li>
+                    <li>Apply an antiseptic or antibiotic ointment.</li>
+                    <li>Cover the cut with a sterile bandage or gauze.</li>
+                    <li>Monitor for signs of infection, such as redness or swelling.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function toggleBurnTypes() {
+        var burnTypeButtons = document.getElementById('burn-type-buttons');
+        burnTypeButtons.style.display = burnTypeButtons.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function showBurnType(burnType) {
+        var burnInstructions = document.getElementById('burn-instructions');
+        var instructions = '';
+
+        if (burnType === 'first-degree') {
+            instructions = `
+                <h4>First Degree Burn</h4>
+                <p>A first-degree burn is the mildest type of burn, affecting only the outer layer of the skin. Symptoms include redness, minor inflammation, and pain.</p>
+                <ul>
+                    <li>Cool the burn with running water for at least 10 minutes.</li>
+                    <li>Avoid using ice directly on the burn as it can cause more damage.</li>
+                    <li>Pat the area dry gently and cover it with a sterile bandage or clean cloth.</li>
+                    <li>Take over-the-counter pain relief like ibuprofen or acetaminophen if needed.</li>
+                    <li>Keep the area clean and dry to prevent infection.</li>
+                </ul>
+            `;
+        } else if (burnType === 'second-degree') {
+            instructions = `
+                <h4>Second Degree Burn</h4>
+                <p>A second-degree burn affects both the outer layer (epidermis) and the underlying layer (dermis) of the skin. Symptoms include blisters, intense redness, and severe pain.</p>
+                <ul>
+                    <li>Cool the burn with running water for at least 10-15 minutes.</li>
+                    <li>Do not pop any blisters as this can lead to infection.</li>
+                    <li>Gently pat the area dry and apply a sterile bandage or gauze.</li>
+                    <li>Take pain relievers like ibuprofen or acetaminophen to manage pain.</li>
+                    <li>If blisters break, clean the area with water and apply an antibiotic ointment.</li>
+                    <li>Seek medical attention if the burn covers a large area or shows signs of infection.</li>
+                </ul>
+            `;
+        } else if (burnType === 'third-degree') {
+            instructions = `
+                <h4>Third Degree Burn</h4>
+                <p>A third-degree burn is the most severe, affecting all layers of the skin and potentially underlying tissues. It may appear white, charred, or leathery, and the burn area may be numb due to nerve damage.</p>
+                <ul>
+                    <li>Call emergency services immediately.</li>
+                    <li>Do not immerse the burn in water; cover it with a clean, non-stick cloth or bandage.</li>
+                    <li>Do not apply any ointments or attempt to remove burned clothing stuck to the skin.</li>
+                    <li>Keep the person warm and monitor for shock (pale skin, shallow breathing).</li>
+                    <li>Wait for professional medical help to arrive.</li>
+                </ul>
+            `;
+        }
+
+        burnInstructions.innerHTML = instructions;
+        document.getElementById('burn-instructions').style.display = 'block';
+        document.getElementById('choking-tab').style.display = 'none';
+        document.getElementById('cuts-tab').style.display = 'none';
+    }
+
+    function toggleBurns() {
+        document.getElementById('burn-instructions').style.display = 'block';
+        document.getElementById('choking-tab').style.display = 'none';
+        document.getElementById('cuts-tab').style.display = 'none';
+        document.getElementById('burn-type-buttons').style.display = 'block';
+    }
+
+    function toggleChoking() {
+        document.getElementById('burn-instructions').style.display = 'none';
+        document.getElementById('choking-tab').style.display = 'block';
+        document.getElementById('cuts-tab').style.display = 'none';
+    }
+
+    function toggleCuts() {
+        document.getElementById('burn-instructions').style.display = 'none';
+        document.getElementById('choking-tab').style.display = 'none';
+        document.getElementById('cuts-tab').style.display = 'block';
+    }
+
+    function callEmergencyService(service) {
+        let message = '';
+        if (service === 'parents') {
+            message = "Calling Parents...";
+        } else if (service === 'police') {
+            message = "Calling Police...";
+        } else if (service === 'ambulance') {
+            message = "Calling Ambulance...";
+        } else if (service === 'fire') {
+            message = "Calling Fire Department...";
+        }
+        alert(message);
+    }
+</script>
+</body>
+</html>
