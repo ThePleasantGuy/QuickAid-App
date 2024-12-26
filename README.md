@@ -9,4 +9,4 @@ QuickAid is an emergency response application designed to provide instant help i
 - **Emergency Alerts**: Allows users to send real-time alerts to pre-set contacts in case of an emergency.
 - **Location Tracking**: Users can share their current location with emergency responders or contacts for quick assistance.
 
-P.S: Location tracking is incomplete and email.Tue code files are in master
+**P.S: Location tracking is incomplete and email.The code files are in master**
